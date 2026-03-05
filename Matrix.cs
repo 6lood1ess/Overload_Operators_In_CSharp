@@ -199,5 +199,28 @@ namespace MatrixCalculator {
     public static implicit operator int(Matrix matrix) {
       return matrix.CalculateDeterminant();
     }
+
+    // Determinant calculation (simplified for 2x2 and 3x3 matrices)
+    public int CalculateDeterminant() {
+
+      if (_size == 1) {
+        return _elements[0, 0];
+      }
+
+      if (_size == 2) {
+        return _elements[0, 0] * _elements[1, 1] - _elements[0, 1] * _elements[1, 0];
+      }
+
+      if (_size == 3) {
+        return _elements[0, 0] * _elements[1, 1] * _elements[2, 2] +
+               _elements[0, 1] * _elements[1, 2] * _elements[2, 0] +
+               _elements[0, 2] * _elements[1, 0] * _elements[2, 1] -
+               _elements[0, 2] * _elements[1, 1] * _elements[2, 0] -
+               _elements[0, 0] * _elements[1, 2] * _elements[2, 1] -
+               _elements[0, 1] * _elements[1, 0] * _elements[2, 2];
+      }
+
+      throw new MatrixException("Determinant is calculated only for 1x1, 2x2 and 3x3 matrices");
+    }
   }
 }
