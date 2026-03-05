@@ -150,6 +150,106 @@ namespace MatrixCalculator {
 
       return true;
     }
+
+    private void PerformMatrixOperation(string operationSymbol, string operationName) {
+
+      if (!CheckMatricesExist()) {
+        return;
+      }
+      
+      try {
+
+        Console.WriteLine($"--- MATRIX {operationName.ToUpper()} ---\n" +
+                          $"A {operationSymbol} B:\n");
+        
+        Matrix resultMatrix = null;
+        
+        if (operationSymbol == "+") {
+          resultMatrix = _matrixA + _matrixB;
+
+        } else if (operationSymbol == "*") {
+          resultMatrix = _matrixA * _matrixB;
+        }
+        
+        Console.WriteLine(resultMatrix);
+      }
+
+      catch (MatrixException exception) {
+        Console.WriteLine($"Error: {exception.Message}");
+      }
+    }
+
+    private void CompareMatrices()
+    {
+      if (!CheckMatricesExist()) return;
+      
+      Console.WriteLine("--- COMPARE MATRICES ---");
+      Console.WriteLine();
+      
+      try
+      {
+        Console.WriteLine($"A > B:  {_matrixA > _matrixB}");
+        Console.WriteLine($"A < B:  {_matrixA < _matrixB}");
+        Console.WriteLine($"A >= B: {_matrixA >= _matrixB}");
+        Console.WriteLine($"A <= B: {_matrixA <= _matrixB}");
+        Console.WriteLine($"A == B: {_matrixA == _matrixB}");
+        Console.WriteLine($"A != B: {_matrixA != _matrixB}");
+        
+        int comparisonResult = _matrixA.CompareTo(_matrixB);
+        string comparisonMessage = comparisonResult > 0 ? "A is greater than B" : 
+                                  (comparisonResult < 0 ? "A is less than B" : "A is equal to B");
+        Console.WriteLine($"\nCompareTo result: {comparisonMessage}");
+      }
+      catch (MatrixException exception)
+      {
+        Console.WriteLine($"Error: {exception.Message}");
+      }
+    }
+
+    private void CalculateDeterminants() {
+
+      if (!CheckMatricesExist()) {
+        return;
+      }
+      
+      int determinantA;
+      int determinantB;
+      int determinantFromCast;
+
+      Console.WriteLine("--- CALCULATE DETERMINANTS ---\n");
+      
+      try {
+
+        determinantA = _matrixA.CalculateDeterminant();
+        determinantB = _matrixB.CalculateDeterminant();
+        
+        Console.WriteLine($"Determinant of A: {determinantA}" +
+                          $"Determinant of B: {determinantB}");
+        
+        // Using implicit conversion
+        determinantFromCast = _matrixA;
+        Console.WriteLine($"Determinant of A (via conversion): {determinantFromCast}\n");
+        
+        // Using true/false operators
+        if (_matrixA) {
+          Console.WriteLine("Matrix A is non-singular (determinant != 0)");
+
+        } else {
+          Console.WriteLine("Matrix A is singular (determinant = 0)");
+        }
+        
+        if (_matrixB) {
+          Console.WriteLine("Matrix B is non-singular (determinant != 0)");
+
+        } else {
+          Console.WriteLine("Matrix B is singular (determinant = 0)");
+        }
+      }
+
+      catch (MatrixException exception) {
+        Console.WriteLine($"Error: {exception.Message}");
+      }
+    }
   }
 
 
