@@ -185,5 +185,19 @@ namespace MatrixCalculator {
     public static bool operator !=(Matrix firstMatrix, Matrix secondMatrix) {
       return !(firstMatrix == secondMatrix);
     }
+
+    // true/false operator overload
+    public static bool operator true(Matrix matrix) {
+      return matrix.CalculateDeterminant() != 0;
+    }
+
+    public static bool operator false(Matrix matrix) {
+      return matrix.CalculateDeterminant() == 0;
+    }
+
+    // Implicit conversion to int (returns determinant)
+    public static implicit operator int(Matrix matrix) {
+      return matrix.CalculateDeterminant();
+    }
   }
 }
