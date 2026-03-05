@@ -272,6 +272,7 @@ namespace MatrixCalculator {
           minorElements[minorRow, minorColumn] = _matrix[rowIndex, columnIndex];
           ++minorColumn;
         }
+        
         ++minorRow;
       }
 
@@ -391,3 +392,4 @@ namespace MatrixCalculator {
     }
   }
 }
+
