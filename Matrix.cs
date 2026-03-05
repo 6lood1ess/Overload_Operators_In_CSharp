@@ -43,5 +43,35 @@ namespace MatrixCalculator {
         }
       }
     }
+
+    // Indexer
+    public int this[int rowIndex, int columnIndex] {
+
+      get {
+
+        if (rowIndex < 0 || rowIndex >= _size || columnIndex < 0 || columnIndex >= _size) {
+          throw new MatrixException("Index is outside the matrix boundaries");
+        }
+
+        return _elements[rowIndex, columnIndex];
+      }
+
+      set {
+
+        if (rowIndex < 0 || rowIndex >= _size || columnIndex < 0 || columnIndex >= _size) {
+          throw new MatrixException("Index is outside the matrix boundaries");
+        }
+
+        _elements[rowIndex, columnIndex] = value;
+      }
+    }
+
+    // Property for getting size
+    public int Size {
+
+      get {
+        return _size; 
+      }
+    }
   }
 }
