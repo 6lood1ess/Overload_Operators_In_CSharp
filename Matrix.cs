@@ -118,5 +118,72 @@ namespace MatrixCalculator {
 
       return resultMatrix;
     }
+
+    // Comparison operators overload
+    public static bool operator >(Matrix firstMatrix, Matrix secondMatrix) {
+
+      if (firstMatrix._size != secondMatrix._size) {
+        throw new MatrixException("Matrices must have the same size");
+      }
+
+      return firstMatrix.CalculateDeterminant() > secondMatrix.CalculateDeterminant();
+    }
+
+    public static bool operator <(Matrix firstMatrix, Matrix secondMatrix) {
+
+      if (firstMatrix._size != secondMatrix._size) {
+        throw new MatrixException("Matrices must have the same size");
+      }
+
+      return firstMatrix.CalculateDeterminant() < secondMatrix.CalculateDeterminant();
+    }
+
+    public static bool operator >=(Matrix firstMatrix, Matrix secondMatrix) {
+
+      if (firstMatrix._size != secondMatrix._size) {
+        throw new MatrixException("Matrices must have the same size");
+      }
+
+      return firstMatrix.CalculateDeterminant() >= secondMatrix.CalculateDeterminant();
+    }
+
+    public static bool operator <=(Matrix firstMatrix, Matrix secondMatrix) {
+
+      if (firstMatrix._size != secondMatrix._size) {
+        throw new MatrixException("Matrices must have the same size");
+      }
+
+      return firstMatrix.CalculateDeterminant() <= secondMatrix.CalculateDeterminant();
+    }
+
+    public static bool operator ==(Matrix firstMatrix, Matrix secondMatrix) {
+
+      if (ReferenceEquals(firstMatrix, null) && ReferenceEquals(secondMatrix, null)) {
+        return true;
+      }
+
+      if (ReferenceEquals(firstMatrix, null) || ReferenceEquals(secondMatrix, null)) {
+        return false;
+      }
+
+      if (firstMatrix._size != secondMatrix._size) {
+        return false;
+      }
+
+      for (int rowIndex = 0; rowIndex < firstMatrix._size; ++rowIndex) {
+        for (int columnIndex = 0; columnIndex < firstMatrix._size; ++columnIndex) {
+
+          if (firstMatrix[rowIndex, columnIndex] != secondMatrix[rowIndex, columnIndex]) {
+            return false;
+          }
+        }
+      }
+
+      return true;
+    }
+
+    public static bool operator !=(Matrix firstMatrix, Matrix secondMatrix) {
+      return !(firstMatrix == secondMatrix);
+    }
   }
 }
