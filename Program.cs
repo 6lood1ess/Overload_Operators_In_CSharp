@@ -80,7 +80,7 @@ namespace MatrixCalculator {
           }
           
           if (!exitProgram) {
-            Console.WriteLine("\nPress any key to close program...");
+            Console.WriteLine("\nPress any key to continue...");
             Console.ReadKey();
             Console.Clear();
           }
@@ -98,15 +98,15 @@ namespace MatrixCalculator {
       Console.WriteLine("========================================" +
                         "|           MATRIX CALCULATOR          |" +
                         "========================================\n" +
-                        "1. Create new matrices" +
-                        "2. Display current matrices" +
-                        "3. Add matrices (A + B)" +
-                        "4. Multiply matrices (A * B)" +
-                        "5. Compare matrices (>, <, ==, !=)" +
-                        "6. Calculate determinants" +
-                        "7. Calculate inverse matrix" +
-                        "8. Clone and compare" +
-                        "9. Run test mode" +
+                        "1. Create new matrices\n" +
+                        "2. Display current matrices\n" +
+                        "3. Add matrices (A + B)\n" +
+                        "4. Multiply matrices (A * B)\n" +
+                        "5. Compare matrices (>, <, ==, !=)\n" +
+                        "6. Calculate determinants\n" +
+                        "7. Calculate inverse matrix\n" +
+                        "8. Clone and compare\n" +
+                        "9. Run test mode\n" +
                         "0. Exit\n");
       Console.Write("Enter your choice: ");
     }
@@ -126,9 +126,9 @@ namespace MatrixCalculator {
       _matrixA = new Matrix(matrixSize);
       _matrixB = new Matrix(matrixSize);
       
-      Console.WriteLine($"\nMatrix A ({matrixSize}x{matrixSize}) created:" +
+      Console.WriteLine($"\nMatrix A ({matrixSize}x{matrixSize}) created:\n" +
                         $"{_matrixA}\n" +
-                        $"Matrix B ({matrixSize}x{matrixSize}) created:" +
+                        $"Matrix B ({matrixSize}x{matrixSize}) created:\n" +
                         $"{_matrixB}");
     }
 
@@ -138,10 +138,10 @@ namespace MatrixCalculator {
         return;
       }
       
-      Console.WriteLine("--- CURRENT MATRICES ---\n" +
-                        $"Matrix A ({_matrixA.Size}x{_matrixA.Size}):" +
+      Console.WriteLine("--- CURRENT MATRICES ---\n\n" +
+                        $"Matrix A ({_matrixA.Size}x{_matrixA.Size}):\n" +
                         $"{_matrixA}\n" +
-                        $"Matrix B ({_matrixB.Size}x{_matrixB.Size}):" +
+                        $"Matrix B ({_matrixB.Size}x{_matrixB.Size}):\n" +
                         $"{_matrixB}");
     }
 
@@ -164,8 +164,8 @@ namespace MatrixCalculator {
       
       try {
 
-        Console.WriteLine($"--- MATRIX {operationName.ToUpper()} ---\n" +
-                          $"A {operationSymbol} B:\n");
+        Console.WriteLine($"--- MATRIX {operationName.ToUpper()} ---\n\n" +
+                          $"A {operationSymbol} B:");
         
         Matrix resultMatrix = null;
         
@@ -176,7 +176,7 @@ namespace MatrixCalculator {
           resultMatrix = _matrixA * _matrixB;
         }
         
-        Console.WriteLine(resultMatrix);
+        Console.WriteLine($"{resultMatrix}");
       }
 
       catch (MatrixException exception) {
@@ -197,18 +197,18 @@ namespace MatrixCalculator {
       
       try {
 
-        Console.WriteLine($"A > B:  {_matrixA > _matrixB}" +
-                          $"A < B:  {_matrixA < _matrixB}" +
-                          $"A >= B: {_matrixA >= _matrixB}" +
-                          $"A <= B: {_matrixA <= _matrixB}" +
-                          $"A == B: {_matrixA == _matrixB}" +
+        Console.WriteLine($"A > B:  {_matrixA > _matrixB}\n" +
+                          $"A < B:  {_matrixA < _matrixB}\n" +
+                          $"A >= B: {_matrixA >= _matrixB}\n" +
+                          $"A <= B: {_matrixA <= _matrixB}\n" +
+                          $"A == B: {_matrixA == _matrixB}\n" +
                           $"A != B: {_matrixA != _matrixB}");
         
         comparisonResult = _matrixA.CompareTo(_matrixB);
 
         comparisonMessage = comparisonResult > 0 ? "A is greater than B" : 
           (comparisonResult < 0 ? "A is less than B" : "A is equal to B");
-        Console.WriteLine($"\nCompareTo result: {comparisonMessage}");
+        Console.WriteLine($"\nCompare to result: {comparisonMessage}");
       }
 
       catch (MatrixException exception) {
@@ -222,9 +222,9 @@ namespace MatrixCalculator {
         return;
       }
       
-      int determinantA;
-      int determinantB;
-      int determinantFromCast;
+      double determinantA;
+      double determinantB;
+      double determinantFromCast;
 
       Console.WriteLine("--- CALCULATE DETERMINANTS ---\n");
       
@@ -233,7 +233,7 @@ namespace MatrixCalculator {
         determinantA = _matrixA.CalculateDeterminant();
         determinantB = _matrixB.CalculateDeterminant();
         
-        Console.WriteLine($"Determinant of A: {determinantA}" +
+        Console.WriteLine($"Determinant of A: {determinantA}\n" +
                           $"Determinant of B: {determinantB}");
         
         // Using implicit conversion
@@ -269,8 +269,8 @@ namespace MatrixCalculator {
       
       Console.WriteLine("--- CALCULATE INVERSE MATRIX ---\n");
       
-      Console.WriteLine("Choose matrix to invert:" +
-                        "1. Matrix A" +
+      Console.WriteLine("Choose matrix to invert:\n" +
+                        "1. Matrix A\n" +
                         "2. Matrix B\n");
       Console.Write("Your choice: ");
       
@@ -289,11 +289,11 @@ namespace MatrixCalculator {
           return;
         }
         
-        Console.WriteLine($"\nOriginal matrix ({(userChoice == "1" ? "A" : "B")}):" +
+        Console.WriteLine($"\nOriginal matrix ({(userChoice == "1" ? "A" : "B")}):\n" +
                           $"{selectedMatrix}\n");
         
         Matrix inverseMatrix = selectedMatrix.CalculateInverseMatrix();
-        Console.WriteLine("Inverse matrix:" +
+        Console.WriteLine("Inverse matrix:\n" +
                           $"{inverseMatrix}");
         
         Console.WriteLine("Verification: Original * Inverse:");
@@ -315,16 +315,16 @@ namespace MatrixCalculator {
       
       Console.WriteLine("--- CLONE AND COMPARE ---\n");
       
-      Console.WriteLine("Cloning matrix A...");
+      Console.WriteLine("Cloning matrix A...\n");
       Matrix clonedMatrix = (Matrix)_matrixA.Clone();
       
-      Console.WriteLine("Original matrix A:" +
+      Console.WriteLine("Original matrix A:\n" +
                         $"{_matrixA}\n" +
-                        "Cloned matrix:" +
+                        "Cloned matrix:\n" +
                         $"{clonedMatrix}\n" +
-                        $"A.Equals(clonedMatrix): {_matrixA.Equals(clonedMatrix)}" +
+                        $"A.Equals(clonedMatrix): {_matrixA.Equals(clonedMatrix)}\n" +
                         $"A == clonedMatrix: {_matrixA == clonedMatrix}\n" +
-                        $"HashCode of A: {_matrixA.GetHashCode()}" +
+                        $"HashCode of A: {_matrixA.GetHashCode()}\n" +
                         $"HashCode of clone: {clonedMatrix.GetHashCode()}");
     }
 
@@ -341,41 +341,41 @@ namespace MatrixCalculator {
 
     private void TestMatrixSize(int size) {
 
-      Console.WriteLine($"\n{new string('=', 50)}" +
-                        $"TESTING {size}x{size} MATRICES" +
-                        $"{new string('=', 50)}\n");
+      Console.WriteLine($"\n{new string('=', 49)}" +
+                        $" TESTING {size}x{size} MATRICES " +
+                        $"{new string('=', 49)}\n");
 
       try {
 
         // Creating matrices
         Console.WriteLine($"Creating matrix A ({size}x{size}):");
         Matrix testMatrixA = new Matrix(size);
-        Console.WriteLine(testMatrixA);
+        Console.WriteLine($"{testMatrixA}");
 
         Console.WriteLine($"\nCreating matrix B ({size}x{size}):");
         Matrix testMatrixB = new Matrix(size);
-        Console.WriteLine(testMatrixB);
+        Console.WriteLine($"{testMatrixB}");
 
         // Basic operations
         Console.WriteLine("\nA + B:");
         Matrix sumMatrix = testMatrixA + testMatrixB;
-        Console.WriteLine(sumMatrix);
+        Console.WriteLine($"{sumMatrix}");
 
         Console.WriteLine("\nA * B:");
         Matrix productMatrix = testMatrixA * testMatrixB;
-        Console.WriteLine(productMatrix);
+        Console.WriteLine($"{productMatrix}");
 
         // Determinants
-        int determinantA = testMatrixA.CalculateDeterminant();
-        int determinantB = testMatrixB.CalculateDeterminant();
+        double determinantA = testMatrixA.CalculateDeterminant();
+        double determinantB = testMatrixB.CalculateDeterminant();
         
-        Console.WriteLine($"\nDeterminant of A: {determinantA}" +
+        Console.WriteLine($"\nDeterminant of A: {determinantA}\n" +
                           $"Determinant of B: {determinantB}\n");
 
         // Matrix comparison
-        Console.WriteLine($"A > B: {testMatrixA > testMatrixB}" +
-                          $"A < B: {testMatrixA < testMatrixB}" +
-                          $"A == B: {testMatrixA == testMatrixB}" +
+        Console.WriteLine($"A > B: {testMatrixA > testMatrixB}\n" +
+                          $"A < B: {testMatrixA < testMatrixB}\n" +
+                          $"A == B: {testMatrixA == testMatrixB}\n" +
                           $"A != B: {testMatrixA != testMatrixB}\n");
 
         // Using true/false operators
@@ -393,27 +393,27 @@ namespace MatrixCalculator {
 
             Console.WriteLine($"\nInverse matrix for A ({size}x{size}):");
             Matrix inverseMatrix = testMatrixA.CalculateInverseMatrix();
-            Console.WriteLine(inverseMatrix);
+            Console.WriteLine($"{inverseMatrix}");
 
-            Console.WriteLine("Verification: A * A^(-1):");
+            Console.WriteLine("Verification: A * A^(-1):\n" +
                               $"{testMatrixA * inverseMatrix}");
           }
         }
 
         catch (MatrixException exception) {
-          Console.WriteLine($"Cannot calculate inverse: {exception.Message}");
+          Console.WriteLine($"\nCannot calculate inverse: {exception.Message}");
         }
 
         // Cloning
-        Console.WriteLine("\nCloning matrix A. . .");
+        Console.WriteLine("Cloning matrix A. . .");
         Matrix clonedMatrix = (Matrix)testMatrixA.Clone();
-        Console.WriteLine("\nClone of matrix A:");
-                          $"{clonedMatrix}" +
+        Console.WriteLine("\nClone of matrix A:\n" +
+                          $"{clonedMatrix}\n" +
                           $"A.Equals(clonedMatrix): {testMatrixA.Equals(clonedMatrix)}");
       }
 
       catch (Exception exception) {
-        Console.WriteLine($"Error in test: {exception.Message}");
+        Console.WriteLine($"\nError in test: {exception.Message}");
       }
     }
   }

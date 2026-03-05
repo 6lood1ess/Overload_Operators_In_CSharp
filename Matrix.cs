@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Text;
 
 namespace MatrixCalculator {
   
   public class Matrix : ICloneable, IComparable<Matrix> {
 
-    private int[,] _elements;
+    private double[,] _matrix;
     private int _size;
-    private Random _randomGenerator;
+    private static readonly Random s_randomGenerator = new Random();
 
     // Constructor for random generation
     public Matrix(int size) {
@@ -15,13 +16,12 @@ namespace MatrixCalculator {
         throw new MatrixException("Matrix size must be positive");
       }
 
-      _randomGenerator = new Random();
       _size = size;
-      _elements = new int[_size, _size];
+      _matrix = new double[_size, _size];
 
       for (int rowIndex = 0; rowIndex < _size; ++rowIndex) {
         for (int columnIndex = 0; columnIndex < _size; ++columnIndex) {
-          _elements[rowIndex, columnIndex] = _randomGenerator.Next(1, 10);
+          _matrix[rowIndex, columnIndex] = s_randomGenerator.Next(1, 10);
         }
       }
     }
@@ -33,41 +33,39 @@ namespace MatrixCalculator {
         throw new MatrixException("Source matrix cannot be null");
       }
 
-      _randomGenerator = new Random();
       _size = otherMatrix._size;
-      _elements = new int[_size, _size];
+      _matrix = new double[_size, _size];
 
       for (int rowIndex = 0; rowIndex < _size; ++rowIndex) {
         for (int columnIndex = 0; columnIndex < _size; ++columnIndex) {
-          _elements[rowIndex, columnIndex] = otherMatrix._elements[rowIndex, columnIndex];
+          _matrix[rowIndex, columnIndex] = otherMatrix._matrix[rowIndex, columnIndex];
         }
       }
     }
 
     // Constructor with specific values
-    public Matrix(int[,] elements) {
+    public Matrix(double[,] matrix) {
 
-      if (elements == null) {
+      if (matrix == null) {
         throw new MatrixException("Elements array cannot be null");
       }
 
-      if (elements.GetLength(0) != elements.GetLength(1)) {
+      if (matrix.GetLength(0) != matrix.GetLength(1)) {
         throw new MatrixException("Array must be square");
       }
 
-      _randomGenerator = new Random();
-      _size = elements.GetLength(0);
-      _elements = new int[_size, _size];
+      _size = matrix.GetLength(0);
+      _matrix = new double[_size, _size];
 
       for (int rowIndex = 0; rowIndex < _size; ++rowIndex) {
         for (int columnIndex = 0; columnIndex < _size; ++columnIndex) {
-          _elements[rowIndex, columnIndex] = elements[rowIndex, columnIndex];
+          _matrix[rowIndex, columnIndex] = matrix[rowIndex, columnIndex];
         }
       }
     }
 
     // Indexer
-    public int this[int rowIndex, int columnIndex] {
+    public double this[int rowIndex, int columnIndex] {
 
       get {
 
@@ -75,7 +73,7 @@ namespace MatrixCalculator {
           throw new MatrixException("Index is outside the matrix boundaries");
         }
 
-        return _elements[rowIndex, columnIndex];
+        return _matrix[rowIndex, columnIndex];
       }
 
       set {
@@ -84,7 +82,7 @@ namespace MatrixCalculator {
           throw new MatrixException("Index is outside the matrix boundaries");
         }
 
-        _elements[rowIndex, columnIndex] = value;
+        _matrix[rowIndex, columnIndex] = value;
       }
     }
 
@@ -127,7 +125,7 @@ namespace MatrixCalculator {
       for (int rowIndex = 0; rowIndex < firstMatrix._size; ++rowIndex) {
         for (int columnIndex = 0; columnIndex < firstMatrix._size; ++columnIndex) {
 
-          int sumOfProducts = 0;
+          double sumOfProducts = 0;
 
           for (int multiplicationIndex = 0; multiplicationIndex < firstMatrix._size; ++multiplicationIndex) {
             sumOfProducts += firstMatrix[rowIndex, multiplicationIndex] * 
@@ -218,29 +216,29 @@ namespace MatrixCalculator {
     }
 
     // Implicit conversion to int (returns determinant)
-    public static implicit operator int(Matrix matrix) {
+    public static implicit operator double(Matrix matrix) {
       return matrix.CalculateDeterminant();
     }
 
     // Determinant calculation for matrices of any size using recursive method
-    public int CalculateDeterminant() {
+    public double CalculateDeterminant() {
 
       if (_size == 1) {
-        return _elements[0, 0];
+        return _matrix[0, 0];
       }
 
       if (_size == 2) {
-        return _elements[0, 0] * _elements[1, 1] - _elements[0, 1] * _elements[1, 0];
+        return _matrix[0, 0] * _matrix[1, 1] - _matrix[0, 1] * _matrix[1, 0];
       }
 
-      int determinant = 0;
+      double determinant = 0;
       int sign = 1;
 
       for (int columnIndex = 0; columnIndex < _size; ++columnIndex) {
 
         Matrix minorMatrix = CreateMinorMatrix(0, columnIndex);
 
-        determinant += sign * _elements[0, columnIndex] * minorMatrix.CalculateDeterminant();
+        determinant += sign * _matrix[0, columnIndex] * minorMatrix.CalculateDeterminant();
         sign = -sign;
       }
 
@@ -252,11 +250,10 @@ namespace MatrixCalculator {
 
       int minorSize;
       int minorRow = 0;
-      int minorColumn = 0;
 
       minorSize = _size - 1;
 
-      int[,] minorElements = new int[minorSize, minorSize];
+      double[,] minorElements = new double[minorSize, minorSize];
 
       for (int rowIndex = 0; rowIndex < _size; ++rowIndex) {
 
@@ -264,13 +261,15 @@ namespace MatrixCalculator {
           continue;
         }
 
+        int minorColumn = 0;
+
         for (int columnIndex = 0; columnIndex < _size; ++columnIndex) {
 
           if (columnIndex == excludedColumn) {
             continue;
           }
 
-          minorElements[minorRow, minorColumn] = _elements[rowIndex, columnIndex];
+          minorElements[minorRow, minorColumn] = _matrix[rowIndex, columnIndex];
           ++minorColumn;
         }
         ++minorRow;
@@ -282,15 +281,15 @@ namespace MatrixCalculator {
     // Inverse matrix using adjugate matrix method
     public Matrix CalculateInverseMatrix() {
 
-      int determinant = CalculateDeterminant();
+      double determinant = CalculateDeterminant();
       
-      if (determinant == 0) {
+      if (determinant == 0.0) {
         throw new MatrixException("Matrix is singular, inverse does not exist");
       }
 
       if (_size == 1) {
         Matrix resultMatrix = new Matrix(1);
-        resultMatrix[0, 0] = 1 / _elements[0, 0];
+        resultMatrix[0, 0] = 1.0 / _matrix[0, 0];
 
         return resultMatrix;
       }
@@ -332,7 +331,7 @@ namespace MatrixCalculator {
 
       for (int rowIndex = 0; rowIndex < _size; ++rowIndex) {
         for (int columnIndex = 0; columnIndex < _size; ++columnIndex) {
-          resultMatrix[columnIndex, rowIndex] = _elements[rowIndex, columnIndex];
+          resultMatrix[columnIndex, rowIndex] = _matrix[rowIndex, columnIndex];
         }
       }
 
@@ -345,7 +344,7 @@ namespace MatrixCalculator {
 
       for (int rowIndex = 0; rowIndex < _size; ++rowIndex) {
         for (int columnIndex = 0; columnIndex < _size; ++columnIndex) {
-          stringBuilder.Append(_elements[rowIndex, columnIndex].ToString().PadLeft(4));
+          stringBuilder.Append(_matrix[rowIndex, columnIndex].ToString("F2").PadLeft(8));
         }
 
         stringBuilder.AppendLine();
@@ -378,7 +377,7 @@ namespace MatrixCalculator {
 
       for (int rowIndex = 0; rowIndex < _size; ++rowIndex) {
         for (int columnIndex = 0; columnIndex < _size; ++columnIndex) {
-          hashCode = hashCode * 23 + _elements[rowIndex, columnIndex].GetHashCode();
+          hashCode = hashCode * 23 + _matrix[rowIndex, columnIndex].GetHashCode();
         }
       }
 
