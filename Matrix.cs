@@ -222,5 +222,84 @@ namespace MatrixCalculator {
 
       throw new MatrixException("Determinant is calculated only for 1x1, 2x2 and 3x3 matrices");
     }
+
+    // Inverse matrix (only up to 3x3)
+    public Matrix CalculateInverseMatrix() {
+
+      if (_size != 1 && _size != 2 && _size != 3) {
+        throw new MatrixException("Inverse matrix is calculated only up to 3x3 matrices");
+      }
+            
+      int determinant = CalculateDeterminant();
+      
+      if (determinant == 0) {
+        throw new MatrixException("Matrix is singular, inverse does not exist");
+      }
+
+      // Case 1x1 matrix
+      if (_size == 1) {
+
+        Matrix resultMatrix = new Matrix(1);
+
+        resultMatrix[0, 0] = 1 / _elements[0, 0];
+
+        return resultMatrix;
+      }
+
+      // Case 2x2 matrix - optimized formula
+      if (_size == 2) {
+
+        Matrix resultMatrix = new Matrix(2);
+
+        resultMatrix[0, 0] = _elements[1, 1];
+        resultMatrix[0, 1] = -_elements[0, 1];
+        resultMatrix[1, 0] = -_elements[1, 0];
+        resultMatrix[1, 1] = _elements[0, 0];
+        
+        // Divide each element by determinant
+        for (int rowIndex = 0; rowIndex < 2; ++rowIndex) {
+          for (int columnIndex = 0; columnIndex < 2; ++columnIndex) {
+            resultMatrix[rowIndex, columnIndex] = resultMatrix[rowIndex, columnIndex] / determinant;
+          }
+        }
+        
+        return resultMatrix;
+      }
+
+      // Case 3x3 matrix - optimized formula using cofactors
+      if (_size == 3) {
+        
+        Matrix resultMatrix = new Matrix(3);
+      
+        // Calculate cofactors for each element
+        resultMatrix[0, 0] = (_elements[1, 1] * _elements[2, 2] - _elements[1, 2] * _elements[2, 1]);
+      
+        resultMatrix[0, 1] = -(_elements[1, 0] * _elements[2, 2] - _elements[1, 2] * _elements[2, 0]);
+      
+        resultMatrix[0, 2] = (_elements[1, 0] * _elements[2, 1] - _elements[1, 1] * _elements[2, 0]);
+      
+        resultMatrix[1, 0] = -(_elements[0, 1] * _elements[2, 2] - _elements[0, 2] * _elements[2, 1]);
+      
+        resultMatrix[1, 1] = (_elements[0, 0] * _elements[2, 2] - _elements[0, 2] * _elements[2, 0]);
+      
+        resultMatrix[1, 2] = -(_elements[0, 0] * _elements[2, 1] - _elements[0, 1] * _elements[2, 0]);
+      
+        resultMatrix[2, 0] = (_elements[0, 1] * _elements[1, 2] - _elements[0, 2] * _elements[1, 1]);
+      
+        resultMatrix[2, 1] = -(_elements[0, 0] * _elements[1, 2] - _elements[0, 2] * _elements[1, 0]);
+      
+        resultMatrix[2, 2] = (_elements[0, 0] * _elements[1, 1] - _elements[0, 1] * _elements[1, 0]);
+      
+        // Transpose the matrix (cofactor matrix is already transposed in this implementation)
+        // Divide each element by determinant
+        for (int rowIndex = 0; rowIndex < 3; ++rowIndex) {
+          for (int columnIndex = 0; columnIndex < 3; ++columnIndex) {
+            resultMatrix[rowIndex, columnIndex] = resultMatrix[rowIndex, columnIndex] / determinant;
+          }
+        }
+      
+        return resultMatrix;
+      }
+    }
   }
 }
