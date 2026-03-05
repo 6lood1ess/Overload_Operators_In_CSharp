@@ -73,5 +73,50 @@ namespace MatrixCalculator {
         return _size; 
       }
     }
+
+    // Addition operator overload
+    public static Matrix operator +(Matrix firstMatrix, Matrix secondMatrix) {
+
+      if (firstMatrix._size != secondMatrix._size) {
+        throw new MatrixException("Matrices must have the same size");
+      }
+
+      Matrix resultMatrix = new Matrix(firstMatrix._size);
+
+      for (int rowIndex = 0; rowIndex < firstMatrix._size; ++rowIndex) {
+        for (int columnIndex = 0; columnIndex < firstMatrix._size; ++columnIndex) {
+          resultMatrix[rowIndex, columnIndex] = 
+            firstMatrix[rowIndex, columnIndex] + secondMatrix[rowIndex, columnIndex];
+        }
+      }
+
+      return resultMatrix;
+    }
+
+    // Multiplication operator overload
+    public static Matrix operator *(Matrix firstMatrix, Matrix secondMatrix) {
+
+      if (firstMatrix._size != secondMatrix._size) {
+        throw new MatrixException("Matrices must have the same size");
+      }
+
+      Matrix resultMatrix = new Matrix(firstMatrix._size);
+
+      for (int rowIndex = 0; rowIndex < firstMatrix._size; ++rowIndex) {
+        for (int columnIndex = 0; columnIndex < firstMatrix._size; ++columnIndex) {
+
+          int sumOfProducts = 0;
+
+          for (int multiplicationIndex = 0; multiplicationIndex < firstMatrix._size; ++multiplicationIndex) {
+            sumOfProducts += firstMatrix[rowIndex, multiplicationIndex] * 
+                            secondMatrix[multiplicationIndex, columnIndex];
+          }
+
+          resultMatrix[rowIndex, columnIndex] = sumOfProducts;
+        }
+      }
+
+      return resultMatrix;
+    }
   }
 }
