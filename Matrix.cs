@@ -301,5 +301,57 @@ namespace MatrixCalculator {
         return resultMatrix;
       }
     }
+
+    public override string ToString() {
+
+      StringBuilder stringBuilder = new StringBuilder();
+
+      for (int rowIndex = 0; rowIndex < _size; ++rowIndex) {
+        for (int columnIndex = 0; columnIndex < _size; ++columnIndex) {
+          stringBuilder.Append(_elements[rowIndex, columnIndex].ToString().PadLeft(4));
+        }
+
+        stringBuilder.AppendLine();
+      }
+
+      return stringBuilder.ToString();
+    }
+
+    public int CompareTo(Matrix otherMatrix) {
+
+      if (otherMatrix == null) {
+        return 1;
+      }
+
+      return this.CalculateDeterminant().CompareTo(otherMatrix.CalculateDeterminant());
+    }
+
+    public override bool Equals(object comparedObject) {
+
+      if (comparedObject == null || !(comparedObject is Matrix)) {
+        return false;
+      }
+
+      return this == (Matrix)comparedObject;
+    }
+
+    public override int GetHashCode() {
+
+      int hashCode = 17;
+
+      for (int rowIndex = 0; rowIndex < _size; ++rowIndex) {
+        for (int columnIndex = 0; columnIndex < _size; ++columnIndex) {
+          hashCode = hashCode * 23 + _elements[rowIndex, columnIndex].GetHashCode();
+        }
+      }
+
+      return hashCode;
+    }
+
+    // Prototype pattern - deep copy
+    public object Clone() {
+
+      return new Matrix(this);
+    }
   }
 }
