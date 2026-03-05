@@ -44,6 +44,28 @@ namespace MatrixCalculator {
       }
     }
 
+    // Constructor with specific values
+    public Matrix(int[,] elements) {
+
+      if (elements == null) {
+        throw new MatrixException("Elements array cannot be null");
+      }
+
+      if (elements.GetLength(0) != elements.GetLength(1)) {
+        throw new MatrixException("Array must be square");
+      }
+
+      _randomGenerator = new Random();
+      _size = elements.GetLength(0);
+      _elements = new int[_size, _size];
+
+      for (int rowIndex = 0; rowIndex < _size; ++rowIndex) {
+        for (int columnIndex = 0; columnIndex < _size; ++columnIndex) {
+          _elements[rowIndex, columnIndex] = elements[rowIndex, columnIndex];
+        }
+      }
+    }
+
     // Indexer
     public int this[int rowIndex, int columnIndex] {
 

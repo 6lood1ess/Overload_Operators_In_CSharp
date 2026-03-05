@@ -61,7 +61,12 @@ namespace MatrixCalculator {
               CloneAndCompare();
               break;
             }
-              
+            
+            case "9": { 
+              RunTestMode();
+              break;
+            }
+
             case "0": {
               exitProgram = true;
               Console.WriteLine("Exiting program. Goodbye!");
@@ -101,6 +106,7 @@ namespace MatrixCalculator {
                         "6. Calculate determinants" +
                         "7. Calculate inverse matrix" +
                         "8. Clone and compare" +
+                        "9. Run test mode" +
                         "0. Exit\n");
       Console.Write("Enter your choice: ");
     }
@@ -120,11 +126,10 @@ namespace MatrixCalculator {
       _matrixA = new Matrix(matrixSize);
       _matrixB = new Matrix(matrixSize);
       
-      Console.WriteLine($"\nMatrix A ({matrixSize}x{matrixSize}) created:");
-      Console.WriteLine(_matrixA);
-      
-      Console.WriteLine($"Matrix B ({matrixSize}x{matrixSize}) created:");
-      Console.WriteLine(_matrixB);
+      Console.WriteLine($"\nMatrix A ({matrixSize}x{matrixSize}) created:" +
+                        $"{_matrixA}\n" +
+                        $"Matrix B ({matrixSize}x{matrixSize}) created:" +
+                        $"{_matrixB}");
     }
 
     private void DisplayMatrices() {
@@ -179,29 +184,34 @@ namespace MatrixCalculator {
       }
     }
 
-    private void CompareMatrices()
-    {
-      if (!CheckMatricesExist()) return;
+    private void CompareMatrices() {
+
+      if (!CheckMatricesExist()) {
+        return;
+      }
       
-      Console.WriteLine("--- COMPARE MATRICES ---");
-      Console.WriteLine();
+      int comparisonResult;
+      string comparisonMessage;
+
+      Console.WriteLine("--- COMPARE MATRICES ---\n");
       
-      try
-      {
-        Console.WriteLine($"A > B:  {_matrixA > _matrixB}");
-        Console.WriteLine($"A < B:  {_matrixA < _matrixB}");
-        Console.WriteLine($"A >= B: {_matrixA >= _matrixB}");
-        Console.WriteLine($"A <= B: {_matrixA <= _matrixB}");
-        Console.WriteLine($"A == B: {_matrixA == _matrixB}");
-        Console.WriteLine($"A != B: {_matrixA != _matrixB}");
+      try {
+
+        Console.WriteLine($"A > B:  {_matrixA > _matrixB}" +
+                          $"A < B:  {_matrixA < _matrixB}" +
+                          $"A >= B: {_matrixA >= _matrixB}" +
+                          $"A <= B: {_matrixA <= _matrixB}" +
+                          $"A == B: {_matrixA == _matrixB}" +
+                          $"A != B: {_matrixA != _matrixB}");
         
-        int comparisonResult = _matrixA.CompareTo(_matrixB);
-        string comparisonMessage = comparisonResult > 0 ? "A is greater than B" : 
-                                  (comparisonResult < 0 ? "A is less than B" : "A is equal to B");
+        comparisonResult = _matrixA.CompareTo(_matrixB);
+
+        comparisonMessage = comparisonResult > 0 ? "A is greater than B" : 
+          (comparisonResult < 0 ? "A is less than B" : "A is equal to B");
         Console.WriteLine($"\nCompareTo result: {comparisonMessage}");
       }
-      catch (MatrixException exception)
-      {
+
+      catch (MatrixException exception) {
         Console.WriteLine($"Error: {exception.Message}");
       }
     }
@@ -248,6 +258,162 @@ namespace MatrixCalculator {
 
       catch (MatrixException exception) {
         Console.WriteLine($"Error: {exception.Message}");
+      }
+    }
+
+    private void CalculateInverseMatrix() {
+
+      if (!CheckMatricesExist()) {
+        return;
+      }
+      
+      Console.WriteLine("--- CALCULATE INVERSE MATRIX ---\n");
+      
+      Console.WriteLine("Choose matrix to invert:" +
+                        "1. Matrix A" +
+                        "2. Matrix B\n");
+      Console.Write("Your choice: ");
+      
+      string userChoice = Console.ReadLine();
+      Matrix selectedMatrix = userChoice == "1" ? _matrixA : (userChoice == "2" ? _matrixB : null);
+      
+      if (selectedMatrix == null) {
+        Console.WriteLine("Invalid choice.");
+        return;
+      }
+      
+      try {
+
+        if (selectedMatrix.CalculateDeterminant() == 0) {
+          Console.WriteLine("Cannot calculate inverse: matrix is singular (determinant = 0)");
+          return;
+        }
+        
+        Console.WriteLine($"\nOriginal matrix ({(userChoice == "1" ? "A" : "B")}):" +
+                          $"{selectedMatrix}\n");
+        
+        Matrix inverseMatrix = selectedMatrix.CalculateInverseMatrix();
+        Console.WriteLine("Inverse matrix:" +
+                          $"{inverseMatrix}");
+        
+        Console.WriteLine("Verification: Original * Inverse:");
+        Matrix verificationMatrix = selectedMatrix * inverseMatrix;
+        Console.WriteLine($"{verificationMatrix}" +
+                          "(Should be close to identity matrix)");
+      }
+
+      catch (MatrixException exception) {
+        Console.WriteLine($"Error: {exception.Message}");
+      }
+    }
+
+    private void CloneAndCompare() {
+
+      if (!CheckMatricesExist()) {
+        return;
+      }
+      
+      Console.WriteLine("--- CLONE AND COMPARE ---\n");
+      
+      Console.WriteLine("Cloning matrix A...");
+      Matrix clonedMatrix = (Matrix)_matrixA.Clone();
+      
+      Console.WriteLine("Original matrix A:" +
+                        $"{_matrixA}\n" +
+                        "Cloned matrix:" +
+                        $"{clonedMatrix}\n" +
+                        $"A.Equals(clonedMatrix): {_matrixA.Equals(clonedMatrix)}" +
+                        $"A == clonedMatrix: {_matrixA == clonedMatrix}\n" +
+                        $"HashCode of A: {_matrixA.GetHashCode()}" +
+                        $"HashCode of clone: {clonedMatrix.GetHashCode()}");
+    }
+
+    private void RunTestMode() {
+
+      Console.WriteLine("========================================" +
+                        "|              TEST MODE               |" +
+                        "========================================\n");
+      
+      TestMatrixSize(2);
+      TestMatrixSize(3);
+      TestMatrixSize(4);
+    }
+
+    private void TestMatrixSize(int size) {
+
+      Console.WriteLine($"\n{new string('=', 50)}" +
+                        $"TESTING {size}x{size} MATRICES" +
+                        $"{new string('=', 50)}\n");
+
+      try {
+
+        // Creating matrices
+        Console.WriteLine($"Creating matrix A ({size}x{size}):");
+        Matrix testMatrixA = new Matrix(size);
+        Console.WriteLine(testMatrixA);
+
+        Console.WriteLine($"\nCreating matrix B ({size}x{size}):");
+        Matrix testMatrixB = new Matrix(size);
+        Console.WriteLine(testMatrixB);
+
+        // Basic operations
+        Console.WriteLine("\nA + B:");
+        Matrix sumMatrix = testMatrixA + testMatrixB;
+        Console.WriteLine(sumMatrix);
+
+        Console.WriteLine("\nA * B:");
+        Matrix productMatrix = testMatrixA * testMatrixB;
+        Console.WriteLine(productMatrix);
+
+        // Determinants
+        int determinantA = testMatrixA.CalculateDeterminant();
+        int determinantB = testMatrixB.CalculateDeterminant();
+        
+        Console.WriteLine($"\nDeterminant of A: {determinantA}" +
+                          $"Determinant of B: {determinantB}\n");
+
+        // Matrix comparison
+        Console.WriteLine($"A > B: {testMatrixA > testMatrixB}" +
+                          $"A < B: {testMatrixA < testMatrixB}" +
+                          $"A == B: {testMatrixA == testMatrixB}" +
+                          $"A != B: {testMatrixA != testMatrixB}\n");
+
+        // Using true/false operators
+        if (testMatrixA) {
+          Console.WriteLine("Matrix A is non-singular (determinant != 0)");
+
+        } else {
+          Console.WriteLine("Matrix A is singular (determinant = 0)");
+        }
+
+        // Inverse matrix (if possible)
+        try {
+
+          if (testMatrixA.CalculateDeterminant() != 0) {
+
+            Console.WriteLine($"\nInverse matrix for A ({size}x{size}):");
+            Matrix inverseMatrix = testMatrixA.CalculateInverseMatrix();
+            Console.WriteLine(inverseMatrix);
+
+            Console.WriteLine("Verification: A * A^(-1):");
+                              $"{testMatrixA * inverseMatrix}");
+          }
+        }
+
+        catch (MatrixException exception) {
+          Console.WriteLine($"Cannot calculate inverse: {exception.Message}");
+        }
+
+        // Cloning
+        Console.WriteLine("\nCloning matrix A. . .");
+        Matrix clonedMatrix = (Matrix)testMatrixA.Clone();
+        Console.WriteLine("\nClone of matrix A:");
+                          $"{clonedMatrix}" +
+                          $"A.Equals(clonedMatrix): {testMatrixA.Equals(clonedMatrix)}");
+      }
+
+      catch (Exception exception) {
+        Console.WriteLine($"Error in test: {exception.Message}");
       }
     }
   }
