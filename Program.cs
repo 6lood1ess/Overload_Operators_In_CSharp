@@ -104,6 +104,52 @@ namespace MatrixCalculator {
                         "0. Exit\n");
       Console.Write("Enter your choice: ");
     }
+
+    private void CreateMatrices() {
+
+      Console.WriteLine("--- CREATE NEW MATRICES ---\n");
+      
+      Console.Write("Enter matrix size (e.g., 2 for 2x2, 3 for 3x3): ");
+
+      if (!int.TryParse(Console.ReadLine(), out int matrixSize) || matrixSize <= 0) {
+        Console.WriteLine("Invalid size. Using default size 2.");
+
+        matrixSize = 2;
+      }
+      
+      _matrixA = new Matrix(matrixSize);
+      _matrixB = new Matrix(matrixSize);
+      
+      Console.WriteLine($"\nMatrix A ({matrixSize}x{matrixSize}) created:");
+      Console.WriteLine(_matrixA);
+      
+      Console.WriteLine($"Matrix B ({matrixSize}x{matrixSize}) created:");
+      Console.WriteLine(_matrixB);
+    }
+
+    private void DisplayMatrices() {
+
+      if (!CheckMatricesExist()) {
+        return;
+      }
+      
+      Console.WriteLine("--- CURRENT MATRICES ---\n" +
+                        $"Matrix A ({_matrixA.Size}x{_matrixA.Size}):" +
+                        $"{_matrixA}\n" +
+                        $"Matrix B ({_matrixB.Size}x{_matrixB.Size}):" +
+                        $"{_matrixB}");
+    }
+
+    private bool CheckMatricesExist() {
+
+      if (_matrixA == null || _matrixB == null) {
+        Console.WriteLine("Matrices not created yet. Please create matrices first (option 1).");
+
+        return false;
+      }
+
+      return true;
+    }
   }
 
 
