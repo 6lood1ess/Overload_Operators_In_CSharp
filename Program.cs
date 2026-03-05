@@ -85,9 +85,7 @@ namespace MatrixCalculator {
             Console.Clear();
           }
         }
-      }
-
-      catch (Exception exception) {
+      } catch (Exception exception) {
         Console.WriteLine($"Unexpected error: {exception.Message}");
         Console.ReadKey();
       }
@@ -177,9 +175,7 @@ namespace MatrixCalculator {
         }
         
         Console.WriteLine($"{resultMatrix}");
-      }
-
-      catch (MatrixException exception) {
+      } catch (MatrixException exception) {
         Console.WriteLine($"Error: {exception.Message}");
       }
     }
@@ -209,9 +205,7 @@ namespace MatrixCalculator {
         comparisonMessage = comparisonResult > 0 ? "A is greater than B" : 
           (comparisonResult < 0 ? "A is less than B" : "A is equal to B");
         Console.WriteLine($"\nCompare to result: {comparisonMessage}");
-      }
-
-      catch (MatrixException exception) {
+      } catch (MatrixException exception) {
         Console.WriteLine($"Error: {exception.Message}");
       }
     }
@@ -254,9 +248,7 @@ namespace MatrixCalculator {
         } else {
           Console.WriteLine("Matrix B is singular (determinant = 0)");
         }
-      }
-
-      catch (MatrixException exception) {
+      } catch (MatrixException exception) {
         Console.WriteLine($"Error: {exception.Message}");
       }
     }
@@ -300,9 +292,7 @@ namespace MatrixCalculator {
         Matrix verificationMatrix = selectedMatrix * inverseMatrix;
         Console.WriteLine($"{verificationMatrix}" +
                           "(Should be close to identity matrix)");
-      }
-
-      catch (MatrixException exception) {
+      } catch (MatrixException exception) {
         Console.WriteLine($"Error: {exception.Message}");
       }
     }
@@ -398,9 +388,7 @@ namespace MatrixCalculator {
             Console.WriteLine("Verification: A * A^(-1):\n" +
                               $"{testMatrixA * inverseMatrix}");
           }
-        }
-
-        catch (MatrixException exception) {
+        } catch (MatrixException exception) {
           Console.WriteLine($"\nCannot calculate inverse: {exception.Message}");
         }
 
@@ -410,9 +398,7 @@ namespace MatrixCalculator {
         Console.WriteLine("\nClone of matrix A:\n" +
                           $"{clonedMatrix}\n" +
                           $"A.Equals(clonedMatrix): {testMatrixA.Equals(clonedMatrix)}");
-      }
-
-      catch (Exception exception) {
+      } catch (Exception exception) {
         Console.WriteLine($"\nError in test: {exception.Message}");
       }
     }
@@ -430,3 +416,4 @@ namespace MatrixCalculator {
     }
   }
 }
+
